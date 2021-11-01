@@ -35,3 +35,11 @@ PUT     /002-todo-webapp/api/v1/todo/update
 GET     /002-todo-webapp/api/v1/todo/{id}
 
 ```
+
+### Deploy the application using the payara-maven-plugin
+
+Using the Payara Maven plugin configured in the pom, we can pack the application with
+
+```shell script
+mvn clean package -Ppayara payara-micro:start 
+```  

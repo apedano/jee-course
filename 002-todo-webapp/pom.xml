@@ -57,4 +57,39 @@
 			<version>1.2.3</version>
 		</dependency>
 	</dependencies>
+	<profiles>
+		<profile>
+			<id>payara</id>
+<!--			<activation>-->
+<!--				<activeByDefault>true</activeByDefault>-->
+<!--			</activation>-->
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>fish.payara.maven.plugins</groupId>
+						<artifactId>payara-micro-maven-plugin</artifactId>
+						<version>1.4.0</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>bundle</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!-- This will create a Uber jar (like jar with dependencies)
+							including the payara server in the jar-->
+							<useUberJar>true</useUberJar>
+							<!-- The war artifact will also be created with the jar of the application -->
+							<deployWar>true</deployWar>
+							<payaraVersion>5.182</payaraVersion>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
 </project>
