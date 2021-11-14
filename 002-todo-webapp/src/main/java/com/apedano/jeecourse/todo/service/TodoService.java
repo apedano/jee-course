@@ -1,12 +1,15 @@
 package com.apedano.jeecourse.todo.service;
 
 import com.apedano.jeecourse.todo.entity.Todo;
+import com.apedano.jeecourse.todo.interceptors.Audit;
+import com.apedano.jeecourse.todo.interceptors.CheckMethodParameter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
+import javax.interceptor.Interceptors;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -41,6 +44,10 @@ public class TodoService {
         return todo;
     }
 
+    //Alternative setting
+    //@Interceptors({Audit.class, CheckMethodParameter.class})
+    @Audit
+    @CheckMethodParameter
     public Todo findTodoById(long id) {
         return entityManager.find(Todo.class, id);
     }

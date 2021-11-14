@@ -32,7 +32,4 @@ public class LoggerProducer {
         return new Car();
     }
 
-    private void doDispose(@Disposes Vehicle vehicle) {
-        log.info("Disposing contextual instance:{}", vehicle);
-    }
 }
