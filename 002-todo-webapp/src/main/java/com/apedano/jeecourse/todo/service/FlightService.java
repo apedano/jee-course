@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.concurrent.CompletionStage;
 
 @MyService
 @Slf4j
@@ -19,6 +20,16 @@ public class FlightService {
     public void triggerCreateFlightEvent(Flight flight) {
         log.info("Triggering new flight event");
         createFlightEvent.fire(flight);
+    }
+
+    public void triggerCreateFlightAsyncEvent(Flight flight) {
+        log.info("Triggering new flight event");
+        CompletionStage<Flight> flightCompletionStage = createFlightEvent.fireAsync(flight); //returns immediately
+        flightCompletionStage.thenAccept(this::flightEventDelivered);
+    }
+
+    private void flightEventDelivered(Flight flight) {
+        log.info("Async Event processed for flight {}", flight);
     }
 
     public LandedFlight createExample() {

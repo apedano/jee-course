@@ -6,6 +6,7 @@ import com.apedano.jeecourse.todo.entity.events.TakenOffFlight;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.event.ObservesAsync;
 import javax.enterprise.event.Reception;
 import javax.enterprise.event.TransactionPhase;
 import java.time.LocalDateTime;
@@ -28,6 +29,12 @@ public class FlightObserver {
     public void conditionalObserver(@Observes(notifyObserver = Reception.IF_EXISTS,
             during = TransactionPhase.AFTER_COMPLETION) @JustCreatedFlight Flight flight) {
         log.info("New flight observed: {}", flight);
+        TakenOffFlight takenOffFlight = new TakenOffFlight(flight, LocalDateTime.now());
+    }
+
+    public void observeCreatedAsync(@ObservesAsync @JustCreatedFlight Flight flight) throws InterruptedException {
+        log.info("New flight observed: {}", flight);
+        Thread.sleep(2000);
         TakenOffFlight takenOffFlight = new TakenOffFlight(flight, LocalDateTime.now());
     }
 }

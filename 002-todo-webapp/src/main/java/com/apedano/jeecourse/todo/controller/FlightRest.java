@@ -28,6 +28,14 @@ public class FlightRest {
         return Response.ok(new GenericResponse("The new flight event has been triggered. Look at the application log to check event handling logs")).build();
     }
 
+    @Path("new-async")
+    @POST
+    public Response triggerNewAsync(Flight flight) {
+        log.info("New flight call on the FLIGHT rest API: {}", flight);
+        flightService.triggerCreateFlightAsyncEvent(flight);
+        return Response.ok(new GenericResponse("The new flight event has been triggered. Look at the application log to check event handling logs")).build();
+    }
+
     @Path("example")
     @GET
     public Response example(Flight flight) {
