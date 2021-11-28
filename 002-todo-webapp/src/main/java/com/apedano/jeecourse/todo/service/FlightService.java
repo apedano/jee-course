@@ -17,6 +17,10 @@ public class FlightService {
     @JustCreatedFlight
     private Event<Flight> createFlightEvent;
 
+    @Inject
+    @JustTakenOffFlight
+    private Event<TakenOffFlight> takeOffFlightEvent;
+
     public void triggerCreateFlightEvent(Flight flight) {
         log.info("Triggering new flight event");
         createFlightEvent.fire(flight);
@@ -36,7 +40,12 @@ public class FlightService {
         Route route = new Route(Airplane.AIRBUS_380_800, "PMO", "NDL");
         //return new Flight(route, LocalDateTime.now(), LocalDateTime.now().plusHours(2).plusMinutes(25));
         Flight flight = new Flight(route);
+        TakenOffFlight takeOffFlightPayload = new TakenOffFlight(flight, LocalDateTime.now());
+        return new LandedFlight(takeOffFlightPayload, LocalDateTime.now().plusHours(2).plusMinutes(25));
+    }
+
+    public void triggerTakeOffEvent(Flight flight) {
         TakenOffFlight takenOffFlight = new TakenOffFlight(flight, LocalDateTime.now());
-        return new LandedFlight(takenOffFlight, LocalDateTime.now().plusHours(2).plusMinutes(25));
+        takeOffFlightEvent.fire(takenOffFlight);
     }
 }

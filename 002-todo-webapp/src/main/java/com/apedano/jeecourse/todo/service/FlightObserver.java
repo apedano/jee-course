@@ -5,6 +5,7 @@ import com.apedano.jeecourse.todo.entity.events.Flight;
 import com.apedano.jeecourse.todo.entity.events.TakenOffFlight;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Priority;
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.ObservesAsync;
 import javax.enterprise.event.Reception;
@@ -17,7 +18,6 @@ public class FlightObserver {
 
     public void observeJustCreated(@Observes @JustCreatedFlight Flight flight) {
         log.info("New flight observed: {}", flight);
-        TakenOffFlight takenOffFlight = new TakenOffFlight(flight, LocalDateTime.now());
     }
 
     /**
@@ -29,12 +29,19 @@ public class FlightObserver {
     public void conditionalObserver(@Observes(notifyObserver = Reception.IF_EXISTS,
             during = TransactionPhase.AFTER_COMPLETION) @JustCreatedFlight Flight flight) {
         log.info("New flight observed: {}", flight);
-        TakenOffFlight takenOffFlight = new TakenOffFlight(flight, LocalDateTime.now());
+
     }
 
     public void observeCreatedAsync(@ObservesAsync @JustCreatedFlight Flight flight) throws InterruptedException {
         log.info("New flight observed: {}", flight);
         Thread.sleep(2000);
-        TakenOffFlight takenOffFlight = new TakenOffFlight(flight, LocalDateTime.now());
+    }
+
+    public void observeTakeOffFlightDepartureAirport(@Observes @JustTakenOffFlight @Priority(100) TakenOffFlight takenOffFlight) {
+        log.info("Take off flight observed at the departure (first -> lower @Priority): {}", takenOffFlight);
+    }
+
+    public void observeTakeOffFlightArrivalAirport(@Observes @JustTakenOffFlight @Priority(200) TakenOffFlight takenOffFlight) {
+        log.info("Take off flight observed at the arrival (second -> higher @Priority): {}", takenOffFlight);
     }
 }

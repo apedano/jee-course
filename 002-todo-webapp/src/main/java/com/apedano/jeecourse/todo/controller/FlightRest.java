@@ -1,7 +1,6 @@
 package com.apedano.jeecourse.todo.controller;
 
 
-import com.apedano.jeecourse.todo.entity.Todo;
 import com.apedano.jeecourse.todo.entity.events.Flight;
 import com.apedano.jeecourse.todo.service.FlightService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +27,14 @@ public class FlightRest {
         return Response.ok(new GenericResponse("The new flight event has been triggered. Look at the application log to check event handling logs")).build();
     }
 
+    @Path("take-off")
+    @POST
+    public Response triggerTakeOff(Flight flight) {
+        log.info("Called take off for flight: {}", flight);
+        flightService.triggerTakeOffEvent(flight);
+        return Response.ok(new GenericResponse("The new flight take off event has been triggered. Look at the application log to check the prioritized observers")).build();
+    }
+
     @Path("new-async")
     @POST
     public Response triggerNewAsync(Flight flight) {
@@ -35,6 +42,7 @@ public class FlightRest {
         flightService.triggerCreateFlightAsyncEvent(flight);
         return Response.ok(new GenericResponse("The new flight event has been triggered. Look at the application log to check event handling logs")).build();
     }
+
 
     @Path("example")
     @GET
