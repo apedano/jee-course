@@ -1,2 +1,3 @@
-FROM airhacks/glassfish
-COPY ./target/003-jpa-webapp.war ${DEPLOYMENT_DIR}
+FROM open-liberty:kernel-java11
+COPY --chown=1001:0  target/sample-jpa-jee.war /config/dropins/
+COPY --chown=1001:0  server.xml /config
